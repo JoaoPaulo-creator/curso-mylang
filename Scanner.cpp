@@ -102,6 +102,8 @@ bool Scanner::isAlphaNumeric(char c) { return isAlpha(c) || isDigit(c); }
 
 bool Scanner::isDigit(char c) { return c >= '0' && c <= '9'; }
 
+char Scanner::advance() { return source[current++]; }
+
 void Scanner::scanToken() {
   char c = advance();
   switch (c) {
@@ -171,6 +173,13 @@ void Scanner::scanToken() {
   case '"':
     break;
   default:
+    if (isDigit(c)) {
+      number();
+    } else if (isAlpha(c)) {
+      identifier();
+    } else {
+      Debug::error(line, "Unexpected character");
+    }
     break;
   }
 }

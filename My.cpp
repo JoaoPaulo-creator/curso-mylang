@@ -1,4 +1,5 @@
 #include "My.hpp"
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -26,6 +27,10 @@ void My::runFile(const std::string &path) {
 
   std::string content(buffer.begin(), buffer.end());
   run(content);
+  if (Debug::hasError) {
+    // erro de lógica
+    std::exit(65);
+  }
 }
 
 void My::runPrompt() {
@@ -39,6 +44,17 @@ void My::runPrompt() {
     run(line);
     std::cout << "\nmy> ";
   }
+
+  if (Debug::hasError) {
+    // erro de lógica
+    std::exit(65);
+  }
 }
 
-void My::run(const std::string &source) { std::cout << source; }
+void My::run(const std::string &source) {
+  Scanner scanner(source);
+  std::vector<Token> tokens = scanner.scanTokens();
+  for (auto &token : tokens) {
+    std::cout << token.toString() << '\n';
+  }
+}

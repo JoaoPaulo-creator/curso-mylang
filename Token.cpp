@@ -27,5 +27,5 @@ std::string Token::toString() {
     ss_literal << "[no literal]";
   }
 
-  return str_enum + " " + lexeme + ss_literal.str();
+  return str_enum + " " + lexeme + " " + ss_literal.str();
 }
