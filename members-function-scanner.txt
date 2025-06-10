@@ -1,0 +1,37 @@
+// Verifica se a string tem somente minúsculas, maiúsculas e/ou underlines, para formar nomes de variáveis, funções, classes, arrays, ...
+bool isAlpha(char c);
+
+// Verifica se só tem números
+bool isDigit(char c);
+
+// Verifica se é isAlpha e isDigit
+bool isAlphaNumeric(char c);
+
+// Verifica o próximo caractere em análise, retorna true(se forem iguais) ou false(se forem diferentes)
+bool match(char expected);
+
+// Armazena(usando um switch case) o conteúdo em um char
+void scanToken();
+
+// Soma mais um caractere, ou seja, começa a ler o conteúdo de onde parou não mais do zero
+char advance();
+
+// Sobrecarregadas, a de 1 parâmetro chama de 2 parâmetros e passa o token e um ponteiro nulo;
+// A segunda adiciona ao vector: tokens para gerar uma concatenação de strings(devidamente convertidas)
+void addToken(TokenType type);
+void addToken(TokenType type, std::any literal);
+
+// Verifica se o arquivo chegou ao final(retorna \0) se não retorna o atual
+char peek();
+
+// Avança mais um caractere, desde que ainda não tenha chegado ao final do arquivo
+char peekNext();
+
+// Separa as strings literais
+void string();
+
+// Seleciona números, mas também com pontos para float e double
+void number();
+
+// Verifica se o token está presente na lista lista de palavras reservadas e adiciona, se não adiciona o token listado em palavras identificadoras
+void identifier();
