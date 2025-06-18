@@ -1,4 +1,5 @@
 #pragma once
+#include "Token.hpp"
 #include <iostream>
 
 class Debug {
@@ -8,4 +9,5 @@ private:
 public:
   inline static bool hasError = false;
   static void error(int line, const std::string &);
+  static void error(Token token, const std::string &);
 };
