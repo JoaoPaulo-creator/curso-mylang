@@ -2,6 +2,7 @@
 #include "Debug.hpp"
 #include "Token.hpp"
 #include <cmath>
+#include <string>
 #include <vector>
 
 Scanner::Scanner(const std::string &source) : source(source) {}
@@ -47,6 +48,10 @@ void Scanner::number() {
     while (isDigit(peek())) {
       advance();
     }
+
+    std::string text = source.substr(start, current - start);
+    double number = std::stod(std::string{text});
+    addToken(TokenType::NUMBER, number);
   }
 }
 
@@ -65,7 +70,7 @@ void Scanner::string() {
 
   advance();
 
-  std::string value(source.substr(start + 1, current - start + 1));
+  std::string value(source.substr(start + 1, current - start - 2));
   addToken(TokenType::STRING, value);
 }
 
@@ -169,8 +174,10 @@ void Scanner::scanToken() {
   case '\t':
     break;
   case '\n':
+    line++;
     break;
   case '"':
+    string();
     break;
   default:
     if (isDigit(c)) {

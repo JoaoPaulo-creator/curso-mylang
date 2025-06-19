@@ -18,3 +18,7 @@ void Debug::error(Token token, const std::string &message) {
     report(token.line, " at " + token.lexeme, message);
   }
 }
+
+void Debug::runtimeError(const RuntimeError &err) {
+  std::cerr << "[line " << err.token.line << "] Error: " << err.what() << '\n';
+}
