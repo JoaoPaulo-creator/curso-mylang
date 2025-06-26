@@ -44,4 +44,12 @@ struct If : Stmt, public std::enable_shared_from_this<If> {
      std::shared_ptr<Stmt> elseBranch);
   std::any accept(StmtVisitor &visitor) override;
 };
+
+struct While : Stmt, public std::enable_shared_from_this<While> {
+  std::shared_ptr<Expr> condition;
+  std::shared_ptr<Stmt> body;
+
+  While(std::shared_ptr<Expr> condition, std::shared_ptr<Stmt> body);
+  std::any accept(StmtVisitor &visitor) override;
+};
 } // namespace Statement

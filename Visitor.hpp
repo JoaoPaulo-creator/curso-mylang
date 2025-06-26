@@ -33,6 +33,7 @@ struct Print;
 struct Var;
 struct Block;
 struct If;
+struct While;
 
 struct StmtVisitor {
   virtual std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) = 0;
@@ -40,6 +41,7 @@ struct StmtVisitor {
   virtual std::any visitVarStmt(std::shared_ptr<Var> stmt) = 0;
   virtual std::any visitBlockStmt(std::shared_ptr<Block> stmt) = 0;
   virtual std::any visitIfStmt(std::shared_ptr<If> stmt) = 0;
+  virtual std::any visitWhileStmt(std::shared_ptr<While> stmt) = 0;
   virtual ~StmtVisitor() = default;
 };
 

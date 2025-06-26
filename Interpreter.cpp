@@ -251,3 +251,11 @@ std::any Interpreter::visitLogicalExpr(std::shared_ptr<Logical> expr) {
 
   return evaluate(expr->right);
 }
+
+std::any Interpreter::visitWhileStmt(std::shared_ptr<Statement::While> stmt) {
+  while (isTruthy(evaluate(stmt->condition))) {
+    execute(stmt->body);
+  }
+
+  return {};
+}

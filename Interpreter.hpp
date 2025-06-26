@@ -31,6 +31,7 @@ public:
   std::any visitVarStmt(std::shared_ptr<Statement::Var> stmt) override;
   std::any visitBlockStmt(std::shared_ptr<Statement::Block> stmt) override;
   std::any visitIfStmt(std::shared_ptr<Statement::If> stmt) override;
+  std::any visitWhileStmt(std::shared_ptr<Statement::While> stmt) override;
 
   std::shared_ptr<Env> global{new Env};
 

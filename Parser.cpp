@@ -161,9 +161,19 @@ std::shared_ptr<Statement::Stmt> Parser::statement() {
   if (match(TokenType::PRINT)) {
     return printStatement();
   }
+
   if (match(TokenType::IF)) {
     return ifStatement();
   }
+
+  if (match(TokenType::FOR)) {
+    return forStatement();
+  }
+
+  if (match(TokenType::WHILE)) {
+    return whileStatement();
+  }
+
   if (match(TokenType::LEFT_BRACE)) {
     return std::make_shared<Statement::Block>(block());
   }
@@ -262,4 +272,57 @@ std::shared_ptr<Expr> Parser::logicalAnd() {
   }
 
   return expr;
+}
+
+std::shared_ptr<Statement::Stmt> Parser::whileStatement() {
+  consume(TokenType::LEFT_PAREN, "Expected '(' after 'while'");
+  std::shared_ptr<Expr> condition = expression();
+  consume(TokenType::RIGHT_PAREN, "Expected ')' after 'while' statement");
+  std::shared_ptr<Statement::Stmt> body = statement();
+  return std::make_shared<Statement::While>(condition, body);
+}
+
+std::shared_ptr<Statement::Stmt> Parser::forStatement() {
+  consume(TokenType::LEFT_PAREN, "Expected '(' after 'for'");
+
+  std::shared_ptr<Statement::Stmt> init;
+  if (match(TokenType::SEMICOLON)) {
+    init = nullptr;
+  } else if (match(TokenType::VAR)) {
+    init = varDeclaration();
+  } else {
+    init = expressionStatement();
+  }
+
+  std::shared_ptr<Expr> condition = nullptr;
+  if (!check(TokenType::SEMICOLON)) {
+    condition = expression();
+  }
+
+  consume(TokenType::SEMICOLON, "Expected ';' after 'for' statement");
+  std::shared_ptr<Expr> increment = nullptr;
+
+  if (!check(TokenType::RIGHT_PAREN)) {
+    increment = expression();
+  }
+
+  consume(TokenType::RIGHT_PAREN, "Expected ')' after 'for' loop statement");
+  std::shared_ptr<Statement::Stmt> body = statement();
+
+  if (increment != nullptr) {
+    body = std::make_shared<Statement::Block>(
+        std::vector<std::shared_ptr<Statement::Stmt>>{
+            body, std::make_shared<Statement::Expression>(increment)});
+  }
+
+  if (condition == nullptr) {
+    condition = std::make_shared<Literal>(true);
+  }
+
+  if (init != nullptr) {
+    body = std::make_shared<Statement::Block>(
+        std::vector<std::shared_ptr<Statement::Stmt>>{init, body});
+  }
+
+  return body;
 }

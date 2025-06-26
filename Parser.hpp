@@ -47,6 +47,8 @@ private:
   std::shared_ptr<Statement::Stmt> varDeclaration();
   std::vector<std::shared_ptr<Statement::Stmt>> block();
   std::shared_ptr<Statement::Stmt> ifStatement();
+  std::shared_ptr<Statement::Stmt> whileStatement();
+  std::shared_ptr<Statement::Stmt> forStatement();
 
 public:
   Parser(const std::vector<Token> &);
