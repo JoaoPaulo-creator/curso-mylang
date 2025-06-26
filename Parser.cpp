@@ -166,12 +166,12 @@ std::shared_ptr<Statement::Stmt> Parser::statement() {
     return ifStatement();
   }
 
-  if (match(TokenType::FOR)) {
-    return forStatement();
-  }
-
   if (match(TokenType::WHILE)) {
     return whileStatement();
+  }
+
+  if (match(TokenType::FOR)) {
+    return forStatement();
   }
 
   if (match(TokenType::LEFT_BRACE)) {
@@ -318,6 +318,8 @@ std::shared_ptr<Statement::Stmt> Parser::forStatement() {
   if (condition == nullptr) {
     condition = std::make_shared<Literal>(true);
   }
+
+  body = std::make_shared<Statement::While>(condition, body);
 
   if (init != nullptr) {
     body = std::make_shared<Statement::Block>(
