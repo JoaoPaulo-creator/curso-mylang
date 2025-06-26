@@ -1,4 +1,5 @@
 #include "Interpreter.hpp"
+#include "Token.hpp"
 
 Interpreter::Interpreter() {}
 
@@ -236,4 +237,17 @@ std::any Interpreter::visitIfStmt(std::shared_ptr<Statement::If> stmt) {
     execute(stmt->elseBranch);
   }
   return {};
+}
+
+std::any Interpreter::visitLogicalExpr(std::shared_ptr<Logical> expr) {
+  std::any left = evaluate(expr->left);
+  if (expr->oper.type == TokenType::OR) {
+    if (isTruthy(left))
+      return left;
+  } else {
+    if (!isTruthy(left))
+      return left;
+  }
+
+  return evaluate(expr->right);
 }

@@ -1,21 +1,15 @@
 var a = "Rabeshinha";
+var nome = "Rabeshy";
+var nomeJoao = "Rabeshy";
+var idade = 29;
+var idadeJoao = 28;
 
-if (a == "Joao") {
-                print "Ola, Joao";
-} else if (a == "Rabeshao") {
-        print "vai a merda, Rabeshao";
+var input = nome;
+if (input == nome and idade == 26) {
+        print("Oi, Rabeshinha");
+} else if (input == nome or idadeJoao > idade) {
+        print("Oi, gostosão");
 } else {
-        print "oi, bebecinho <3";
+        print("Olá!");
 }
 
-var n1 = 2;
-var n2 = 4;
-var result = n1 + n2;
-
-if (result == 4) {
-        print("tá ok");
-} else if (result == 5) {
-        print("não tá ok");
-} else {
-        print("resulto do cálculo é um valor não esperado");
-}

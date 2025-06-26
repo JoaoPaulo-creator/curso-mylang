@@ -18,3 +18,6 @@ clean:
 	rm -f $(OBJS) $(TARGET)
 
 .PHONY: all clean
+
+run:
+	./a.out file.my

@@ -204,7 +204,9 @@ std::shared_ptr<Statement::Stmt> Parser::varDeclaration() {
 }
 
 std::shared_ptr<Expr> Parser::assignment() {
-  std::shared_ptr<Expr> expr = equality();
+  // std::shared_ptr<Expr> expr = equality();
+  std::shared_ptr<Expr> expr = logicalOr();
+
   if (match(TokenType::EQUAL)) {
     Token equals = previous();
     std::shared_ptr<Expr> value = assignment();
@@ -239,4 +241,25 @@ std::shared_ptr<Statement::Stmt> Parser::ifStatement() {
 
   return std::make_shared<Statement::If>(condition, thenBranch, elseBranch);
   return {};
+}
+
+std::shared_ptr<Expr> Parser::logicalOr() {
+  std::shared_ptr<Expr> expr = logicalAnd();
+  while (match(TokenType::OR)) {
+    Token oper = previous();
+    std::shared_ptr<Expr> right = logicalAnd();
+    expr = std::make_shared<Logical>(expr, std::move(oper), right);
+  }
+  return expr;
+}
+
+std::shared_ptr<Expr> Parser::logicalAnd() {
+  std::shared_ptr<Expr> expr = equality();
+  while (match(TokenType::AND)) {
+    Token oper = previous();
+    std::shared_ptr<Expr> right = equality();
+    expr = std::make_shared<Logical>(expr, std::move(oper), right);
+  }
+
+  return expr;
 }

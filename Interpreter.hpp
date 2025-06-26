@@ -26,6 +26,7 @@ public:
 
   std::any visitVariableExpr(std::shared_ptr<Variable> expr) override;
   std::any visitAssignExpr(std::shared_ptr<Assign> expr) override;
+  std::any visitLogicalExpr(std::shared_ptr<Logical> expr) override;
 
   std::any visitVarStmt(std::shared_ptr<Statement::Var> stmt) override;
   std::any visitBlockStmt(std::shared_ptr<Statement::Block> stmt) override;

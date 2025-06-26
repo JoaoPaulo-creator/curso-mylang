@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Token.hpp"
+#include "Visitor.hpp"
+#include <memory>
 #include <utility>
 #include <vector>
-#include "Visitor.hpp"
-#include "Token.hpp"
 
 struct Binary final : Expr, public std::enable_shared_from_this<Binary> {
   std::shared_ptr<Expr> left;
@@ -37,18 +38,28 @@ struct Unary : Expr, public std::enable_shared_from_this<Unary> {
   std::any accept(ExprVisitor &visitor) override;
 };
 
-struct Variable final: Expr, public std::enable_shared_from_this<Variable> {
+struct Variable final : Expr, public std::enable_shared_from_this<Variable> {
   Token name;
   Variable(Token name);
   std::any accept(ExprVisitor &visitor) override;
   ~Variable() = default;
 };
 
-struct Assign final: Expr, public std::enable_shared_from_this<Assign> {
+struct Assign final : Expr, public std::enable_shared_from_this<Assign> {
   Token name;
   std::shared_ptr<Expr> value;
 
   Assign(Token name, std::shared_ptr<Expr> value);
   std::any accept(ExprVisitor &visitor);
   ~Assign() = default;
+};
+
+struct Logical final : Expr, public std::enable_shared_from_this<Logical> {
+  std::shared_ptr<Expr> left;
+  Token oper;
+  std::shared_ptr<Expr> right;
+
+  Logical(std::shared_ptr<Expr> left, Token oper, std::shared_ptr<Expr> right);
+  std::any accept(ExprVisitor &visitor);
+  ~Logical() = default;
 };

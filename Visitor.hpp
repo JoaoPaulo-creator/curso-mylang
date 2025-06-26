@@ -9,6 +9,7 @@ struct Literal;
 struct Unary;
 struct Variable;
 struct Assign;
+struct Logical;
 
 struct ExprVisitor {
   virtual std::any visitBinaryExpr(std::shared_ptr<Binary> expr) = 0;
@@ -17,6 +18,7 @@ struct ExprVisitor {
   virtual std::any visitUnaryExpr(std::shared_ptr<Unary> expr) = 0;
   virtual std::any visitVariableExpr(std::shared_ptr<Variable> expr) = 0;
   virtual std::any visitAssignExpr(std::shared_ptr<Assign> expr) = 0;
+  virtual std::any visitLogicalExpr(std::shared_ptr<Logical> expr) = 0;
   virtual ~ExprVisitor() = default;
 };
 
