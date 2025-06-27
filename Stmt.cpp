@@ -1,4 +1,6 @@
 #include "Stmt.hpp"
+#include <algorithm>
+#include <utility>
 
 namespace Statement {
 Expression::Expression(std::shared_ptr<Expr> expression)
@@ -41,6 +43,21 @@ While::While(std::shared_ptr<Expr> condition, std::shared_ptr<Stmt> body)
 
 std::any While::accept(StmtVisitor &visitor) {
   return visitor.visitWhileStmt(shared_from_this());
+}
+
+Function::Function(Token name, std::vector<Token> params,
+                   std::vector<std::shared_ptr<Stmt>> body)
+    : name{std::move(name)}, params{std::move(params)}, body{std::move(body)} {}
+
+std::any Function::accept(StmtVisitor &visitor) {
+  return visitor.visitFunctionStmt(shared_from_this());
+}
+
+Return::Return(Token keyword, std::shared_ptr<Expr> value)
+    : keyword{std::move(keyword)}, value{std::move(value)} {}
+
+std::any Return::accept(StmtVisitor &visitor) {
+  return visitor.visitReturnStmt(shared_from_this());
 }
 
 } // namespace Statement

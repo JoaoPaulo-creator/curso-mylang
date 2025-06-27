@@ -63,3 +63,15 @@ struct Logical final : Expr, public std::enable_shared_from_this<Logical> {
   std::any accept(ExprVisitor &visitor);
   ~Logical() = default;
 };
+
+struct Call final : Expr, public std::enable_shared_from_this<Call> {
+  std::shared_ptr<Expr> callee;
+  Token paren;
+  std::vector<std::shared_ptr<Expr>> arguments;
+
+  Call(std::shared_ptr<Expr> callee, Token paren,
+       std::vector<std::shared_ptr<Expr>> arguments);
+
+  std::any accept(ExprVisitor &visitor);
+  ~Call() = default;
+};

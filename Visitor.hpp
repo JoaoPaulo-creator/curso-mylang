@@ -10,6 +10,7 @@ struct Unary;
 struct Variable;
 struct Assign;
 struct Logical;
+struct Call;
 
 struct ExprVisitor {
   virtual std::any visitBinaryExpr(std::shared_ptr<Binary> expr) = 0;
@@ -19,6 +20,7 @@ struct ExprVisitor {
   virtual std::any visitVariableExpr(std::shared_ptr<Variable> expr) = 0;
   virtual std::any visitAssignExpr(std::shared_ptr<Assign> expr) = 0;
   virtual std::any visitLogicalExpr(std::shared_ptr<Logical> expr) = 0;
+  virtual std::any visitCallExpr(std::shared_ptr<Call> expr) = 0;
   virtual ~ExprVisitor() = default;
 };
 
@@ -34,6 +36,8 @@ struct Var;
 struct Block;
 struct If;
 struct While;
+struct Function;
+struct Return;
 
 struct StmtVisitor {
   virtual std::any visitExpressionStmt(std::shared_ptr<Expression> stmt) = 0;
@@ -42,6 +46,8 @@ struct StmtVisitor {
   virtual std::any visitBlockStmt(std::shared_ptr<Block> stmt) = 0;
   virtual std::any visitIfStmt(std::shared_ptr<If> stmt) = 0;
   virtual std::any visitWhileStmt(std::shared_ptr<While> stmt) = 0;
+  virtual std::any visitFunctionStmt(std::shared_ptr<Function> stmt) = 0;
+  virtual std::any visitReturnStmt(std::shared_ptr<Return> stmt) = 0;
   virtual ~StmtVisitor() = default;
 };
 

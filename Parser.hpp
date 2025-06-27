@@ -4,6 +4,7 @@
 #include "Expr.hpp"
 #include "Scanner.hpp"
 #include "Stmt.hpp"
+#include <memory>
 #include <stdexcept>
 #include <vector>
 
@@ -39,6 +40,8 @@ private:
   std::shared_ptr<Expr> assignment();
   std::shared_ptr<Expr> logicalOr();
   std::shared_ptr<Expr> logicalAnd();
+  std::shared_ptr<Expr> call();
+  std::shared_ptr<Expr> finishCall(std::shared_ptr<Expr> callee);
 
   std::shared_ptr<Statement::Stmt> statement();
   std::shared_ptr<Statement::Stmt> printStatement();
@@ -49,6 +52,9 @@ private:
   std::shared_ptr<Statement::Stmt> ifStatement();
   std::shared_ptr<Statement::Stmt> whileStatement();
   std::shared_ptr<Statement::Stmt> forStatement();
+  std::shared_ptr<Statement::Stmt> returnStatement();
+
+  std::shared_ptr<Statement::Function> function(std::string kind);
 
 public:
   Parser(const std::vector<Token> &);

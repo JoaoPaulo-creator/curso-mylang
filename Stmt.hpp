@@ -52,4 +52,23 @@ struct While : Stmt, public std::enable_shared_from_this<While> {
   While(std::shared_ptr<Expr> condition, std::shared_ptr<Stmt> body);
   std::any accept(StmtVisitor &visitor) override;
 };
+
+struct Function : Stmt, public std::enable_shared_from_this<Function> {
+  Token name;
+  std::vector<Token> params;
+  std::vector<std::shared_ptr<Stmt>> body;
+
+  Function(Token name, std::vector<Token> params,
+           std::vector<std::shared_ptr<Stmt>> body);
+  std::any accept(StmtVisitor &visitor) override;
+};
+
+struct Return : Stmt, public std::enable_shared_from_this<Return> {
+  Token keyword;
+  std::shared_ptr<Expr> value;
+
+  Return(Token keyword, std::shared_ptr<Expr> value);
+  std::any accept(StmtVisitor &visitor) override;
+};
+
 } // namespace Statement
