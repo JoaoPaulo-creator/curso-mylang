@@ -1,5 +1,5 @@
 fun hello() {
-        prnt("Ola, mundo");
+        print("Ola, mundo");
 }
 
 hello();
@@ -16,3 +16,4 @@ fun double(x) {
 
 var result = double(9);
 print result;
+print double;

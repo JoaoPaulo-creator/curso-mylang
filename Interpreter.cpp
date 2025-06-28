@@ -72,8 +72,9 @@ bool Interpreter::isEqual(const std::any &a, const std::any &b) {
 }
 
 std::string Interpreter::stringify(const std::any &object) {
-  if (object.type() == typeid(nullptr))
+  if (object.type() == typeid(nullptr)) {
     return "nil";
+  }
 
   if (object.type() == typeid(double)) {
     std::string text = std::to_string(std::any_cast<double>(object));
@@ -95,6 +96,12 @@ std::string Interpreter::stringify(const std::any &object) {
       std::string result{"false"};
       return result;
     }
+  }
+
+  if (object.type() == typeid(std::shared_ptr<Function>)) {
+    std::shared_ptr<Callable> function;
+    function = std::any_cast<std::shared_ptr<Function>>(object);
+    return function->toString();
   }
 
   return "stringify: cannot reconize type";
@@ -258,4 +265,42 @@ std::any Interpreter::visitWhileStmt(std::shared_ptr<Statement::While> stmt) {
   }
 
   return {};
+}
+
+std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
+  std::any callee = evaluate(expr->callee);
+  std::vector<std::any> arguments;
+  for (std::shared_ptr<Expr> &argument : expr->arguments) {
+    arguments.push_back(evaluate(argument));
+  }
+
+  std::shared_ptr<Callable> function;
+  if (callee.type() == typeid(std::shared_ptr<Function>)) {
+    function = std::any_cast<std::shared_ptr<Function>>(callee);
+  } else {
+    throw RuntimeError{expr->paren, "Can only call function and classes"};
+  }
+
+  if (static_cast<int>(arguments.size()) != function->arity()) {
+    throw RuntimeError{expr->paren, "Expected " +
+                                        std::to_string(function->arity()) +
+                                        " arguments, but got " +
+                                        std::to_string(arguments.size())};
+  }
+  return function->call(*this, std::move(arguments));
+}
+
+std::any
+Interpreter::visitFunctionStmt(std::shared_ptr<Statement::Function> stmt) {
+  auto function = std::make_shared<Function>(stmt, curr_env);
+  curr_env->define(stmt->name.lexeme, function);
+  return {};
+}
+
+std::any Interpreter::visitReturnStmt(std::shared_ptr<Statement::Return> stmt) {
+  std::any value = nullptr;
+  if (stmt->value != nullptr) {
+    value = evaluate(stmt->value);
+  }
+  throw Return{value};
 }

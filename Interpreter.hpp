@@ -3,8 +3,13 @@
 #include "Debug.hpp"
 #include "Environment.hpp"
 #include "Expr.hpp"
+#include "Function.hpp"
 #include "Stmt.hpp"
 #include "Token.hpp"
+
+struct Return {
+  std::any value;
+};
 
 class Interpreter : public ExprVisitor, public Statement::StmtVisitor {
 public:
@@ -27,11 +32,15 @@ public:
   std::any visitVariableExpr(std::shared_ptr<Variable> expr) override;
   std::any visitAssignExpr(std::shared_ptr<Assign> expr) override;
   std::any visitLogicalExpr(std::shared_ptr<Logical> expr) override;
+  std::any visitCallExpr(std::shared_ptr<Call> expr) override;
 
   std::any visitVarStmt(std::shared_ptr<Statement::Var> stmt) override;
   std::any visitBlockStmt(std::shared_ptr<Statement::Block> stmt) override;
   std::any visitIfStmt(std::shared_ptr<Statement::If> stmt) override;
   std::any visitWhileStmt(std::shared_ptr<Statement::While> stmt) override;
+  std::any
+  visitFunctionStmt(std::shared_ptr<Statement::Function> stmt) override;
+  std::any visitReturnStmt(std::shared_ptr<Statement::Return> stmt) override;
 
   std::shared_ptr<Env> global{new Env};
 

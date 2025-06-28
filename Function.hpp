@@ -18,4 +18,5 @@ public:
 
   int arity();
   std::any call(Interpreter &interpreter, std::vector<std::any> arguments);
+  std::string toString();
 };
