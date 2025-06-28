@@ -7,6 +7,14 @@
 #include "Stmt.hpp"
 #include "Token.hpp"
 
+class Clock : public Callable {
+public:
+  int arity() override;
+  std::any call(Interpreter &interpreter,
+                std::vector<std::any> arguments) override;
+  std::string toString() override;
+};
+
 struct Return {
   std::any value;
 };

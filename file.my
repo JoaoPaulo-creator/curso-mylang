@@ -17,3 +17,6 @@ fun double(x) {
 var result = double(9);
 print result;
 print double;
+
+clock();
+print clock;

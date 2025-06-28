@@ -1,7 +1,27 @@
 #include "Interpreter.hpp"
 #include "Token.hpp"
+#include <chrono>
+#include <memory>
 
-Interpreter::Interpreter() {}
+Interpreter::Interpreter() {
+  global->define("clock", std::shared_ptr<Callable>{});
+}
+
+int Clock::arity() { return 0; }
+
+std::any Clock::call(Interpreter &interpreter,
+                     std::vector<std::any> arguments) {
+  if (arguments.size() > 0 && interpreter.global != nullptr) {
+    Debug::error(1, "clock error");
+  }
+
+  auto now = std::chrono::system_clock::now();
+  std::time_t time_now = std::chrono::system_clock::to_time_t(now);
+  std::cout << std::ctime(&time_now) << '\n';
+  return {};
+}
+
+std::string Clock::toString() { return "<fn native>"; }
 
 std::any Interpreter::visitLiteralExpr(std::shared_ptr<Literal> expr) {
   return expr->value;
@@ -102,6 +122,11 @@ std::string Interpreter::stringify(const std::any &object) {
     std::shared_ptr<Callable> function;
     function = std::any_cast<std::shared_ptr<Function>>(object);
     return function->toString();
+  }
+
+  if (object.type() == typeid(std::shared_ptr<Callable>)) {
+    auto clock = std::make_shared<Clock>();
+    return clock->toString();
   }
 
   return "stringify: cannot reconize type";
@@ -277,6 +302,9 @@ std::any Interpreter::visitCallExpr(std::shared_ptr<Call> expr) {
   std::shared_ptr<Callable> function;
   if (callee.type() == typeid(std::shared_ptr<Function>)) {
     function = std::any_cast<std::shared_ptr<Function>>(callee);
+  } else if (callee.type() == typeid(std::shared_ptr<Callable>)) {
+    auto clock = std::make_shared<Clock>();
+    return clock->call(*this, arguments);
   } else {
     throw RuntimeError{expr->paren, "Can only call function and classes"};
   }
